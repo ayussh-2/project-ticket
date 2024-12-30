@@ -1,17 +1,27 @@
 "use client";
 
-import { Plus, Upload, Users } from "lucide-react";
+import { LogOut, Plus, Upload, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { mockHackers } from "@/config/data";
 import { DataTable } from "@/components/data-table/data-table";
 import { useColumns } from "@/components/data-table/colums";
 import { RegisterHackerDialog } from "@/components/register-hacker/register-hacker-dialog";
 import { RegisterTeamDialog } from "@/components/register-team-dialog/register-team-dialog";
 import { UploadExcelDialog } from "@/components/upload-excel-dialog/upload-excel-dialog";
 import { ModeToggle } from "@/components/theme/Toggle";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { listenToHackers } from "@/firebase/hackerOps";
+import { Hacker } from "@/types";
 
 export default function DashboardPage() {
+  const [hackers, setHackers] = useState<Hacker[]>([]);
   const columns = useColumns();
+  useEffect(() => {
+    const unsubscribe = listenToHackers((updatedHackers) =>
+      setHackers(updatedHackers),
+    );
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div className="h-full flex-1 flex-col space-y-8 p-8 flex font-geistSans">
@@ -23,7 +33,6 @@ export default function DashboardPage() {
           </p>
         </div>
         <div className="flex items-center space-x-2">
-          <ModeToggle />
           <RegisterHackerDialog>
             <Button>
               <Plus className="mr-2 h-4 w-4" />
@@ -42,10 +51,16 @@ export default function DashboardPage() {
               Upload Excel
             </Button>
           </UploadExcelDialog>
+          <ModeToggle />
+          <Link href="/logout">
+            <Button variant="outline">
+              <LogOut className=" h-4 w-4" />
+            </Button>
+          </Link>
         </div>
       </div>
 
-      <DataTable columns={columns} data={mockHackers} />
+      <DataTable columns={columns} data={hackers} />
     </div>
   );
 }

@@ -13,6 +13,7 @@ import {
   serverTimestamp,
   DocumentData,
   QueryDocumentSnapshot,
+  onSnapshot,
 } from "firebase/firestore";
 import { Hacker } from "@/types";
 
@@ -173,6 +174,21 @@ export const deleteHackers = async (hackerIds: string[]) => {
     return hackerIds;
   } catch (error) {
     console.error("Error deleting hackers in batch:", error);
+    throw error;
+  }
+};
+
+export const listenToHackers = (callback: (hackers: Hacker[]) => void) => {
+  try {
+    const collectionRef = collection(db, "hackers");
+    const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
+      const hackers = snapshot.docs.map(mapHackerDoc);
+      callback(hackers);
+    });
+
+    return unsubscribe;
+  } catch (error) {
+    console.error("Error listening to hackers:", error);
     throw error;
   }
 };
