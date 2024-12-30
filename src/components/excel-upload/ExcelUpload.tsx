@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
-import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -12,7 +10,8 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Check, X } from "lucide-react";
-import { toast } from "sonner";
+
+import { useFirebaseOperation } from "@/hooks/use-firebaseOps";
 
 interface ExcelPreviewProps {
   data: any[];
@@ -21,19 +20,11 @@ interface ExcelPreviewProps {
 }
 
 export function ExcelPreview({ data, onConfirm, onCancel }: ExcelPreviewProps) {
-  const [isProcessing, setIsProcessing] = useState(false);
-
+  const { execute, isLoading } = useFirebaseOperation("createHackers");
   const handleConfirm = async () => {
-    setIsProcessing(true);
-    try {
-      await onConfirm();
-      toast.success(`Successfully processed ${data.length} records`);
-    } catch (error: unknown) {
-      console.error(error);
-      toast.error("Failed to process records");
-    } finally {
-      setIsProcessing(false);
-    }
+    const response = execute(data);
+    if (!response) return;
+    onConfirm();
   };
 
   return (
@@ -41,11 +32,11 @@ export function ExcelPreview({ data, onConfirm, onCancel }: ExcelPreviewProps) {
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-medium">Preview ({data.length} records)</h3>
         <div className="space-x-2">
-          <Button variant="outline" onClick={onCancel} disabled={isProcessing}>
+          <Button variant="outline" onClick={onCancel} disabled={isLoading}>
             <X className="mr-2 h-4 w-4" />
             Decline
           </Button>
-          <Button onClick={handleConfirm} disabled={isProcessing}>
+          <Button onClick={handleConfirm} isLoading={isLoading}>
             <Check className="mr-2 h-4 w-4" />
             Upload
           </Button>

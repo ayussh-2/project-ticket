@@ -24,6 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { ExcelPreview } from "../excel-upload/ExcelUpload";
+import { readExcelFile } from "@/utils/readExcel";
 
 const formSchema = z.object({
   file: z.instanceof(FileList),
@@ -40,27 +41,25 @@ export function UploadExcelDialog({ children }: { children: React.ReactNode }) {
   const handleFileChange = async (files: FileList | null) => {
     if (!files?.length) return;
 
-    // const file = files[0];
-    // In a real app, this would parse the Excel file
-    // For demo, we'll simulate parsed data
-    const mockParsedData = [
-      {
-        name: "John Excel",
-        email: "john@excel.com",
-        teamName: "Excel Team",
-      },
-      {
-        name: "Jane Sheet",
-        email: "jane@sheet.com",
-        teamName: "Sheet Squad",
-      },
-    ];
-    setPreviewData(mockParsedData);
+    const file = files[0];
+
+    const records = await readExcelFile(file);
+    setPreviewData(frameData(records));
+  };
+
+  //eslint-disable-next-line
+  const frameData = (records: any[]) => {
+    return records.map((record) => {
+      return {
+        name: record[0],
+        email: record[1],
+        teamName: record[2],
+      };
+    });
   };
 
   const handleConfirm = async () => {
-    // In a real app, this would process and save the data
-    toast.success("Excel file uploaded successfully");
+    toast.success("Hackers updated!");
     setOpen(false);
     setPreviewData(null);
     form.reset();

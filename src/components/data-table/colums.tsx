@@ -4,19 +4,25 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, Copy, Check } from "lucide-react";
 import { useState } from "react";
 
-// Component for handling email cell with copy functionality
-const EmailCell = ({ email }: { email: string }) => {
+const TicketElement = ({ ticketLink }: { ticketLink: string }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(email);
+    navigator.clipboard.writeText(ticketLink);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <div className="flex items-center gap-2">
-      <span>{email}</span>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => window.open(ticketLink, "_blank")}
+      >
+        <ExternalLink className="mr-2 h-4 w-4" />
+        View Ticket
+      </Button>
       <Button
         variant="ghost"
         size="icon"
@@ -48,7 +54,7 @@ export const useColumns = () => {
       enableColumnFilter: true,
       cell: ({ row }) => {
         const email = row.getValue("email") as string;
-        return <EmailCell email={email} />;
+        return <p>{email}</p>;
       },
     },
     {
@@ -57,16 +63,7 @@ export const useColumns = () => {
       enableSorting: true,
       cell: ({ row }) => {
         const ticketLink = row.getValue("ticketLink") as string;
-        return (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => window.open(ticketLink, "_blank")}
-          >
-            <ExternalLink className="mr-2 h-4 w-4" />
-            View Ticket
-          </Button>
-        );
+        return <TicketElement ticketLink={ticketLink} />;
       },
     },
     {
