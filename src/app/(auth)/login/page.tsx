@@ -24,7 +24,6 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { useAuth } from "@/context/AuthContext";
-import { handleFirebaseError } from "@/utils/handleFirebaseError";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
@@ -45,12 +44,9 @@ export default function LoginPage() {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    try {
-      await signIn(data.email, data.password);
-      router.push("/dashboard");
-    } catch (error) {
-      handleFirebaseError(error as never);
-    }
+    const result = await signIn(data.email, data.password);
+    if (!result) return;
+    router.push("/dashboard");
   }
 
   return (

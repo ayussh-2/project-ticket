@@ -9,12 +9,13 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "@/firebase/config";
+import { handleFirebaseError } from "@/utils/handleFirebaseError";
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   signUp: (email: string, password: string) => Promise<void>;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
 }
 
@@ -39,9 +40,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
-    setLoading(true);
-    await signInWithEmailAndPassword(auth, email, password);
-    setLoading(false);
+    try {
+      setLoading(true);
+      await signInWithEmailAndPassword(auth, email, password);
+      return true;
+    } catch (error) {
+      console.error(error);
+      handleFirebaseError(error as never);
+      return false;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = async () => {
