@@ -94,7 +94,7 @@ export const getHackerById = async (hackerId: string) => {
   try {
     const hackerDoc = await getDoc(doc(db, "hackers", hackerId));
     if (!hackerDoc.exists()) {
-      throw new Error("Hacker not found");
+      return null;
     }
     return mapHackerDoc(hackerDoc);
   } catch (error) {

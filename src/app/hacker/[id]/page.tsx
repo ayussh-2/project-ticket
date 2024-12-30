@@ -14,11 +14,12 @@ export default function HackerPage({
   const { execute, isLoading } = useFirebaseOperation("getHackerById");
   const [hacker, setHacker] = useState<Hacker | null>(null);
   const [hackerId, setHackerId] = useState<string | null>(null);
+  const [hackerFound, setHackerFound] = useState<boolean>(true);
 
   async function getHackerById() {
     if (!hackerId) return;
     const hackerDetails = await execute(hackerId);
-    if (!hackerDetails) return notFound();
+    if (!hackerDetails) return setHackerFound(false);
     setHacker(hackerDetails);
   }
 
@@ -37,6 +38,10 @@ export default function HackerPage({
       getHackerById();
     }
   }, [hackerId]);
+
+  if (!hackerFound) {
+    notFound();
+  }
 
   if (isLoading) {
     return (
