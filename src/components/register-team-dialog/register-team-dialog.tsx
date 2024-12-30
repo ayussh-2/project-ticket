@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { useFirebaseOperation } from "@/hooks/use-firebaseOps";
 
 const memberSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -33,7 +34,19 @@ const memberSchema = z.object({
 
 const formSchema = z.object({
   teamName: z.string().min(2, "Team name must be at least 2 characters"),
-  members: z.array(memberSchema).min(1, "At least one member is required"),
+  members: z
+    .array(memberSchema)
+    .min(1, "At least one member is required")
+    .refine(
+      (members) => {
+        const emails = members.map((member) => member.email);
+        return new Set(emails).size === emails.length;
+      },
+      {
+        message: "Emails must be unique",
+        path: ["members"],
+      },
+    ),
 });
 
 export function RegisterTeamDialog({
@@ -56,13 +69,30 @@ export function RegisterTeamDialog({
     name: "members",
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // In a real app, this would make an API call
-    console.log(values);
-    toast.success("Team registered successfully");
+  const { execute, isLoading } = useFirebaseOperation("createHackers");
 
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    const hackers = formatArray(values);
+    execute(hackers);
+    toast.success("Team registered successfully");
     setOpen(false);
     form.reset();
+  }
+
+  function formatArray(usersObject: {
+    teamName: string;
+    members: { name: string; email: string }[];
+  }) {
+    const formattedArray = [];
+    for (let i = 0; i < usersObject.members.length; i++) {
+      formattedArray.push({
+        name: usersObject.members[i].name,
+        email: usersObject.members[i].email,
+        teamName: usersObject.teamName,
+      });
+    }
+
+    return formattedArray;
   }
 
   return (
@@ -119,7 +149,17 @@ export function RegisterTeamDialog({
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage>
+                          {/* Display custom error */}
+                          {form.formState.errors?.members?.[index]?.email && (
+                            <span>
+                              {
+                                form.formState.errors.members[index].email
+                                  ?.message
+                              }
+                            </span>
+                          )}
+                        </FormMessage>
                       </FormItem>
                     )}
                   />
@@ -153,7 +193,9 @@ export function RegisterTeamDialog({
               >
                 Cancel
               </Button>
-              <Button type="submit">Register Team</Button>
+              <Button type="submit" isLoading={isLoading}>
+                Register Team
+              </Button>
             </div>
           </form>
         </Form>

@@ -28,7 +28,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
-      console.log(user);
       document.cookie = `hn6-tiket-admin=${user?.uid ? "admin@hn6@Ticket890" : ""}; path=/`;
     });
 

@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { useFirebaseOperation } from "@/hooks/use-firebaseOps";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -37,6 +38,7 @@ export function RegisterHackerDialog({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const { execute, isLoading } = useFirebaseOperation("createHacker");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,9 +49,9 @@ export function RegisterHackerDialog({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const result = await execute(values);
+    if (!result) return;
     toast.success("Hacker registered successfully");
     setOpen(false);
     form.reset();
@@ -119,7 +121,9 @@ export function RegisterHackerDialog({
               >
                 Cancel
               </Button>
-              <Button type="submit">Register</Button>
+              <Button isLoading={isLoading} type="submit">
+                Register
+              </Button>
             </div>
           </form>
         </Form>

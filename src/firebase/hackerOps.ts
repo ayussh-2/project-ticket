@@ -25,17 +25,19 @@ const mapHackerDoc = (
     ...data,
     createdAt:
       data.createdAt?.toDate().toISOString() || new Date().toISOString(),
-    ticketLink: `https://your-ticket-system.com/ticket/${doc.id}`,
+    ticketLink: `${process.env.NEXT_PUBLIC_TICKET_URL}/${doc.id}`,
   } as Hacker;
 };
 
-const prepareHackerData = (data: Omit<Hacker, "createdAt" | "id">) => ({
+const prepareHackerData = (
+  data: Omit<Hacker, "createdAt" | "id" | "ticketLink" | "registeredBy">,
+) => ({
   ...data,
   createdAt: serverTimestamp(),
 });
 
 export const createHacker = async (
-  hackerData: Omit<Hacker, "id" | "createdAt">,
+  hackerData: Omit<Hacker, "id" | "createdAt" | "ticketLink" | "registeredBy">,
 ) => {
   try {
     const docRef = await addDoc(
@@ -54,7 +56,7 @@ export const createHacker = async (
 };
 
 export const createHackers = async (
-  hackers: Omit<Hacker, "id" | "createdAt">[],
+  hackers: Omit<Hacker, "id" | "createdAt" | "ticketLink" | "registeredBy">[],
 ) => {
   try {
     const batch = writeBatch(db);
