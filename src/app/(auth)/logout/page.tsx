@@ -7,17 +7,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useAuth } from "@/context/AuthContext";
 import { LogOut, CheckCircle2 } from "lucide-react";
 import React, { useEffect } from "react";
 
 export default function Page() {
+  const { logout } = useAuth();
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      document.cookie = "auth=; path=/";
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 1000);
+    async function signOut() {
+      await logout();
+      window.location.href = "/login";
     }
+
+    signOut();
   }, []);
 
   return (

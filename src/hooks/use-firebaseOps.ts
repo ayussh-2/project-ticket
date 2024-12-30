@@ -1,6 +1,7 @@
 import { useState } from "react";
 import * as hackerOperations from "@/firebase/hackerOps";
-import { toast } from "sonner";
+import { handleFirebaseError } from "@/utils/handleFirebaseError";
+import { FirebaseError } from "@/types";
 
 type FirebaseOperation = keyof typeof hackerOperations;
 type OperationData<T extends FirebaseOperation> = Parameters<
@@ -23,10 +24,7 @@ export function useFirebaseOperation<T extends FirebaseOperation>(
       const result = await operation(...args);
       return result;
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "An unexpected error occurred";
-      setError(err instanceof Error ? err : new Error(errorMessage));
-      toast.error(errorMessage);
+      handleFirebaseError(err as FirebaseError);
       return null;
     } finally {
       setIsLoading(false);

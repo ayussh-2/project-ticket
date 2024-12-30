@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 
 import { useAuth } from "@/context/AuthContext";
 import { handleFirebaseError } from "@/utils/handleFirebaseError";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),

@@ -29,7 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(user);
       setLoading(false);
       console.log(user);
-      document.cookie = `auth=${user?.uid ? "true" : ""}; path=/`;
+      document.cookie = `hn6-tiket-admin=${user?.uid ? "admin@hn6@Ticket890" : ""}; path=/`;
     });
 
     return unsubscribe;

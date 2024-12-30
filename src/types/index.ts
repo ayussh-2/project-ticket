@@ -19,3 +19,9 @@ export interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
 }
+
+export type FirebaseError = {
+  code: string;
+  message: string;
+  name: string;
+};

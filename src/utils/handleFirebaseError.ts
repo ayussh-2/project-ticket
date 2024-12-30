@@ -1,9 +1,5 @@
+import { FirebaseError } from "firebase/app";
 import { toast } from "sonner";
-
-type FirebaseError = {
-  code: string;
-  message: string;
-};
 
 export function handleFirebaseError(error: FirebaseError) {
   let errorMessage = "Something went wrong. Please try again.";

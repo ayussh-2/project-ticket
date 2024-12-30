@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const isAuthenticated = request.cookies.get("auth")?.value !== "";
-  console.log(request.cookies.get("auth"));
+  const isAuthenticated =
+    request.cookies.get("hn6-tiket-admin")?.value === "admin@hn6@Ticket890";
   const isAuthPage = request.nextUrl.pathname === "/login";
   const currentPage = request.nextUrl.pathname;
 
