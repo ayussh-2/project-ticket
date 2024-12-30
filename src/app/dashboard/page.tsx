@@ -13,7 +13,7 @@ export default function DashboardPage() {
   const columns = useColumns();
 
   return (
-    <div className="h-full flex-1 flex-col space-y-8 p-8 flex">
+    <div className="h-full flex-1 flex-col space-y-8 p-8 flex font-geistSans">
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Hackers</h2>
