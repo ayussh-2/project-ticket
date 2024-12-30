@@ -1,8 +1,10 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Hacker } from "@/types";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Copy, Check } from "lucide-react";
+import { ExternalLink, Copy, Check, Trash, Pencil } from "lucide-react";
 import { useState } from "react";
+import { ConfirmationDialogue } from "../confirmation-dialogue/confirmation-dialogue";
+import { UpdateHackerDialog } from "../upate-dialogue/updateDialogue";
 
 const TicketElement = ({ ticketLink }: { ticketLink: string }) => {
   const [copied, setCopied] = useState(false);
@@ -36,6 +38,49 @@ const TicketElement = ({ ticketLink }: { ticketLink: string }) => {
         )}
       </Button>
     </div>
+  );
+};
+
+const ManageHacker = ({ rowDetails }: { rowDetails: Hacker }) => {
+  const [openUpdate, setOpenUpdate] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  return (
+    <>
+      <div className="flex items-center justify-start ">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setOpenUpdate(true)}
+          className="h-8 w-8"
+        >
+          <Pencil className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setOpenDelete(true)}
+          className="h-8 w-8 hover:text-red-500"
+        >
+          <Trash className="h-4 w-4" />
+        </Button>
+      </div>
+      <ConfirmationDialogue
+        isOpen={openDelete}
+        onCancel={() => setOpenDelete(false)}
+        hackerName={rowDetails.name}
+        hackerId={rowDetails.id}
+      />
+      <UpdateHackerDialog
+        open={openUpdate}
+        setOpen={setOpenUpdate}
+        initialData={{
+          hackerId: rowDetails.id,
+          name: rowDetails.name,
+          email: rowDetails.email,
+          teamName: rowDetails.teamName,
+        }}
+      />
+    </>
   );
 };
 
@@ -73,9 +118,12 @@ export const useColumns = () => {
       enableColumnFilter: true,
     },
     {
-      accessorKey: "registeredBy",
-      header: "Registered By",
-      enableSorting: true,
+      accessorKey: "manage",
+      header: "Manage",
+      enableSorting: false,
+      cell: ({ row }) => {
+        return <ManageHacker rowDetails={row.original} />;
+      },
     },
   ];
 
