@@ -8,6 +8,7 @@ import { useColumns } from "@/components/data-table/colums";
 import { RegisterHackerDialog } from "@/components/register-hacker/register-hacker-dialog";
 import { RegisterTeamDialog } from "@/components/register-team-dialog/register-team-dialog";
 import { UploadExcelDialog } from "@/components/upload-excel-dialog/upload-excel-dialog";
+import { ModeToggle } from "@/components/theme/Toggle";
 
 export default function DashboardPage() {
   const columns = useColumns();
@@ -22,6 +23,7 @@ export default function DashboardPage() {
           </p>
         </div>
         <div className="flex items-center space-x-2">
+          <ModeToggle />
           <RegisterHackerDialog>
             <Button>
               <Plus className="mr-2 h-4 w-4" />

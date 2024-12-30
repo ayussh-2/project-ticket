@@ -22,7 +22,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
 import { DataTableSearch } from "./data-table-search";
-import { globalFilterFn } from "./use-global-filter";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -45,7 +44,6 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-    globalFilterFn,
     state: {
       sorting,
       columnFilters,
