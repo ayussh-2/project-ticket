@@ -58,8 +58,7 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        geistMono: "var(--font-geist-mono)",
-        geistSans: "var(--font-geist-sans)",
+        jakarta: "var(--font-jakarta)",
       },
     },
   },

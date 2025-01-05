@@ -31,7 +31,7 @@ export function ConfirmationDialogue({
 
   return (
     <AlertDialog open={isOpen}>
-      <AlertDialogContent className="font-geistSans">
+      <AlertDialogContent className="font-jakarta">
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>

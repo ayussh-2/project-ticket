@@ -1,10 +1,11 @@
 "use client";
+import { ArrowLeft, Home } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
-import { Home, ArrowLeft } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="h-screen w-full flex flex-col items-center justify-center space-y-6 bg-background text-foreground font-geistSans">
+    <div className="h-screen w-full flex flex-col items-center justify-center space-y-6 bg-background text-foreground font-jakarta">
       {/* Main Container */}
       <div className="flex flex-col items-center space-y-4 text-center px-4">
         {/* Error Code */}

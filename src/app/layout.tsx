@@ -1,10 +1,12 @@
+import "./globals.css";
+
 import type { Metadata } from "next";
 
-import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { geistMono, geistSans } from "./fonts";
 import { AuthProvider } from "@/context/AuthContext";
+
+import { jakarta } from "./fonts";
 
 export const metadata: Metadata = {
   title: "HackNitr 6.0 - Tickets",
@@ -18,9 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${jakarta.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

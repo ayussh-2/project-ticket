@@ -1,15 +1,17 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import { LogOut, Plus, Upload, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { DataTable } from "@/components/data-table/data-table";
+import Link from "next/link";
+
 import { useColumns } from "@/components/data-table/colums";
+import { DataTable } from "@/components/data-table/data-table";
 import { RegisterHackerDialog } from "@/components/register-hacker/register-hacker-dialog";
 import { RegisterTeamDialog } from "@/components/register-team-dialog/register-team-dialog";
-import { UploadExcelDialog } from "@/components/upload-excel-dialog/upload-excel-dialog";
 import { ModeToggle } from "@/components/theme/Toggle";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { UploadExcelDialog } from "@/components/upload-excel-dialog/upload-excel-dialog";
 import { listenToHackers } from "@/firebase/hackerOps";
 import { Hacker } from "@/types";
 
@@ -24,7 +26,7 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div className="h-full flex-1 flex-col space-y-8 p-8 flex font-geistSans">
+    <div className="h-full flex-1 flex-col space-y-8 p-8 flex font-jakarta">
       <div className="flex items-center justify-between space-y-2">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Hackers</h2>

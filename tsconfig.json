@@ -27,7 +27,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/components/register-hacker"
+    "src/components/register-hacker",
+    "next.config.js"
   ],
   "exclude": ["node_modules"]
 }
