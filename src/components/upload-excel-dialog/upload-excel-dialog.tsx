@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
 import {
@@ -22,32 +23,54 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { ExcelPreview } from "../excel-upload/ExcelUpload";
 import { readExcelFile } from "@/utils/readExcel";
 
+import { ExcelPreview } from "../excel-upload/ExcelUpload";
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const formSchema = z.object({
-  file: z.instanceof(FileList),
+  file: z
+    .any()
+    .refine((files) => {
+      if (typeof window === "undefined") return true; // Skip validation during SSR
+      return files instanceof FileList;
+    }, "Expected FileList")
+    .refine((files) => {
+      if (typeof window === "undefined") return true; // Skip validation during SSR
+      return (
+        files?.[0]?.type ===
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+        files?.[0]?.type === "application/vnd.ms-excel"
+      );
+    }, "Only Excel files are allowed"),
 });
+
+type FormSchema = z.infer<typeof formSchema>;
 
 export function UploadExcelDialog({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [previewData, setPreviewData] = useState<unknown[] | null>(null);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<FormSchema>({
+    defaultValues: {
+      file: undefined,
+    },
   });
 
   const handleFileChange = async (files: FileList | null) => {
     if (!files?.length) return;
 
     const file = files[0];
-
-    const records = await readExcelFile(file);
-    setPreviewData(frameData(records));
+    try {
+      const records = await readExcelFile(file);
+      setPreviewData(frameData(records));
+    } catch (error) {
+      toast.error("Error reading Excel file");
+      console.error(error);
+    }
   };
 
-  //eslint-disable-next-line
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const frameData = (records: any[]) => {
     return records.map((record) => {
       return {
