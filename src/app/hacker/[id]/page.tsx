@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { Hacker } from "@/types";
 import Loader from "@/components/ui/loader";
 
+import Experience from "@/components/ticket/Experience";
+
 export default function HackerPage({
   params,
 }: {
@@ -15,6 +17,7 @@ export default function HackerPage({
   const [hacker, setHacker] = useState<Hacker | null>(null);
   const [hackerId, setHackerId] = useState<string | null>(null);
   const [hackerFound, setHackerFound] = useState<boolean>(true);
+  const [theme, setTheme] = useState(1);
 
   async function getHackerById() {
     if (!hackerId) return;
@@ -54,7 +57,7 @@ export default function HackerPage({
   }
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-10 flex h-screen border-2 content-center">
       <Card>
         <CardHeader>
           <CardTitle>Hacker Details</CardTitle>
@@ -73,9 +76,32 @@ export default function HackerPage({
               <div className="font-semibold">Team Name</div>
               <div className="col-span-3">{hacker?.teamName}</div>
             </div>
+            <div className="justify-between flex w-full mt-3">
+              <button
+                onClick={() => setTheme(1)}
+                className="bg-[#206EA6] h-10 w-10"
+              ></button>
+              <button
+                onClick={() => setTheme(2)}
+                className="bg-[#BBD3D9] h-10 w-10"
+              ></button>
+              <button
+                onClick={() => setTheme(3)}
+                className="bg-[#4C1077] h-10 w-10"
+              ></button>
+              <button
+                onClick={() => setTheme(4)}
+                className="bg-[#FECF29] h-10 w-10"
+              ></button>
+              <button
+                onClick={() => setTheme(5)}
+                className="bg-[#14F195] h-10 w-10"
+              ></button>
+            </div>
           </div>
         </CardContent>
       </Card>
+      {hacker && <Experience hacker={hacker} theme={theme} />}
     </div>
   );
 }
