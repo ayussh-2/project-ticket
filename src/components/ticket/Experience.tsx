@@ -16,11 +16,10 @@ interface ExperienceProps {
 
 const Experience: React.FC<ExperienceProps> = ({ hacker, theme }) => {
   return (
-    <Canvas camera={{ position: [0, 0, 20], fov: 15 }}>
+    <Canvas camera={{ position: [0, -5, 15], fov: 15 }}>
       <ambientLight intensity={6} />
       <directionalLight position={[0.01, 0.04, 0.1]} intensity={5} />
 
-      <OrbitControls />
       <Rig>
         <Ticket hacker={hacker} theme={theme} />
       </Rig>
@@ -37,7 +36,7 @@ function Rig(props) {
     state.events.update(); // Raycasts every frame rather than on pointer-move
     easing.damp3(
       state.camera.position,
-      [-state.pointer.x * 5, -state.pointer.y * 5, 20],
+      [-state.pointer.x * 5, -state.pointer.y * 5, 15],
       0.3,
       delta,
     ); // Move camera

@@ -1,6 +1,5 @@
 "use client";
 import { notFound } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFirebaseOperation } from "@/hooks/use-firebaseOps";
 import { useEffect, useState } from "react";
 import { Hacker } from "@/types";
@@ -37,6 +36,18 @@ export default function HackerPage({
   }, [params]);
 
   useEffect(() => {
+    document.body.style.backgroundImage =
+      "url('https://res.cloudinary.com/diwmwhu0x/image/upload/v1737101818/Background_mwcbdq.png')";
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundRepeat = "repeat";
+    document.body.style.backgroundColor = "#200818";
+
+    return () => {
+      document.body.style.backgroundImage = "";
+    };
+  }, []);
+
+  useEffect(() => {
     if (hackerId) {
       getHackerById();
     }
@@ -57,51 +68,54 @@ export default function HackerPage({
   }
 
   return (
-    <div className="container mx-auto py-10 flex h-screen border-2 content-center">
-      <Card>
-        <CardHeader>
-          <CardTitle>Hacker Details</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <div className="font-semibold">Name</div>
-              <div className="col-span-3">{hacker?.name}</div>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <div className="font-semibold">Email</div>
-              <div className="col-span-3">{hacker?.email}</div>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <div className="font-semibold">Team Name</div>
-              <div className="col-span-3">{hacker?.teamName}</div>
-            </div>
-            <div className="justify-between flex w-full mt-3">
-              <button
-                onClick={() => setTheme(1)}
-                className="bg-[#206EA6] h-10 w-10"
-              ></button>
-              <button
-                onClick={() => setTheme(2)}
-                className="bg-[#BBD3D9] h-10 w-10"
-              ></button>
-              <button
-                onClick={() => setTheme(3)}
-                className="bg-[#4C1077] h-10 w-10"
-              ></button>
-              <button
-                onClick={() => setTheme(4)}
-                className="bg-[#FECF29] h-10 w-10"
-              ></button>
-              <button
-                onClick={() => setTheme(5)}
-                className="bg-[#14F195] h-10 w-10"
-              ></button>
-            </div>
+    <>
+      {hacker && (
+        <div className="w-full h-screen content-center">
+          <div className="w-full h-[30vh] sm:h-[50vh] mt-5">
+            <Experience hacker={hacker} theme={theme} />
           </div>
-        </CardContent>
-      </Card>
-      {hacker && <Experience hacker={hacker} theme={theme} />}
-    </div>
+          <div className=" max-w-[500px] mx-auto my-6 flex justify-around">
+            <button
+              className="w-8 h-8 bg-[#206EA6]"
+              onClick={() => setTheme(1)}
+            ></button>
+            <button
+              className="w-8 h-8 bg-[#BBD3D9]"
+              onClick={() => setTheme(2)}
+            ></button>
+            <button
+              className="w-8 h-8 bg-[#4C1077]"
+              onClick={() => setTheme(3)}
+            ></button>
+            <button
+              className="w-8 h-8 bg-[#FECF29]"
+              onClick={() => setTheme(4)}
+            ></button>
+            <button
+              className="w-8 h-8 bg-[#14F195]"
+              onClick={() => setTheme(5)}
+            ></button>
+          </div>
+          <p className="w-fit mx-auto text-xl sm:text-4xl md:text-5xl mt-16">
+            <span className="text-[#E84B7D]">{hacker.name}</span> is attending
+            hackNITR
+          </p>
+          <p className="w-fit mx-auto text-base sm:text-2xl md:text-3xl mt-5">
+            Register and get your ticket now
+          </p>
+          <div className="w-fit mx-auto mt-10 space-x-4">
+            <button className="bg-[#F4E7D6] text-[#E84B7D] rounded-lg px-4 py-2">
+              Twitter
+            </button>
+            <button className="bg-[#F4E7D6] text-[#E84B7D] rounded-lg px-4 py-2">
+              LinkedIn
+            </button>
+            <button className="bg-[#F4E7D6] text-[#E84B7D] rounded-lg px-4 py-2">
+              Copy Link
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
