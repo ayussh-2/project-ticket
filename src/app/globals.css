@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: "Poppins", sans-serif;
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -69,4 +65,11 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.hacker-page {
+  background-image: url("https://res.cloudinary.com/diwmwhu0x/image/upload/v1737101818/Background_mwcbdq.png");
+  background-size: cover;
+  background-repeat: repeat;
+  background-color: #200818;
 }

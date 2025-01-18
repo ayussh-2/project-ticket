@@ -6,7 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/context/AuthContext";
 
-import { jakarta } from "./fonts";
+import { jakarta, poppins } from "./fonts";
 
 export const metadata: Metadata = {
   title: "HackNitr 6.0 - Tickets",
@@ -20,13 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        ></link>
-      </head>
-      <body className={`${jakarta.variable} antialiased`}>
+      <body className={`${jakarta.variable} ${poppins.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

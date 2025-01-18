@@ -59,6 +59,7 @@ export default {
       },
       fontFamily: {
         jakarta: "var(--font-jakarta)",
+        poppins: "var(--font-poppins)",
       },
     },
   },
